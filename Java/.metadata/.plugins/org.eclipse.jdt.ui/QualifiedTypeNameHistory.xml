@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="opennlp.uima.parser.Parser"/>
+<fullyQualifiedTypeName name="opennlp.tools.parser.ParserModel"/>
+<fullyQualifiedTypeName name="opennlp.tools.parser.Parser"/>
+<fullyQualifiedTypeName name="opennlp.tools.parser.ParserFactory"/>
+<fullyQualifiedTypeName name="opennlp.tools.cmdline.parser.ParserTool"/>
+<fullyQualifiedTypeName name="opennlp.tools.parser.Parse"/>
+</qualifiedTypeNameHistroy>

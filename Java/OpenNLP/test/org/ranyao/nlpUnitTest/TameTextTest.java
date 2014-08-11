@@ -2,13 +2,19 @@ package org.ranyao.nlpUnitTest;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
+import opennlp.tools.cmdline.parser.ParserTool;
+import opennlp.tools.parser.Parse;
+import opennlp.tools.parser.Parser;
+import opennlp.tools.parser.ParserFactory;
+import opennlp.tools.parser.ParserModel;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.sentdetect.SentenceDetector;
@@ -17,20 +23,30 @@ import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.SimpleTokenizer;
 import opennlp.tools.util.InvalidFormatException;
 
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.html.HtmlParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.LinkContentHandler;
+import org.apache.tika.sax.TeeContentHandler;
 import org.junit.Test;
 import org.tartarus.snowball.ext.englishStemmer;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.SAXException;
 
 public class TameTextTest {
 
-	private Path modelDir;
+	private String modelDir;
 
 	public TameTextTest() {
-		this.modelDir = Paths.get("lib\\models").toAbsolutePath();
+		this.modelDir = Paths.get("lib\\models").toAbsolutePath().toString();
 	}
 
 	@Test
 	public void POSTaggingTest() throws InvalidFormatException, IOException {
-		File posModelFile = new File(modelDir.toString(), "en-pos-maxent.bin");
+		File posModelFile = new File(modelDir, "en-pos-maxent.bin");
 
 		FileInputStream posModelStream = new FileInputStream(posModelFile);
 		POSModel model = new POSModel(posModelStream);
@@ -72,19 +88,49 @@ public class TameTextTest {
 	@Test
 	public void SentenceDetectionTest() throws InvalidFormatException,
 			IOException {
-		File modelFile = new File(modelDir.toString(), "en-sent.bin");
+		File modelFile = new File(modelDir, "en-sent.bin");
 		InputStream modelStream = new FileInputStream(modelFile);
 		SentenceModel model = new SentenceModel(modelStream);
 		SentenceDetector detector = new SentenceDetectorME(model);
 		String testString = "This is a sentence. It has fruits, vegetables,"
 				+ " etc. but does not have meat. Mr. Smith went to Washington.";
 		String[] result = detector.sentDetect(testString);
-		
+
 		assertEquals("This is a sentence.", result[0]);
-		assertEquals("It has fruits, vegetables, etc. but does not have meat.", result[1]);
+		assertEquals("It has fruits, vegetables, etc. but does not have meat.",
+				result[1]);
 		assertEquals("Mr. Smith went to Washington.", result[2]);
 	}
-	
-	
 
+	@Test
+	public void ParsingTest() throws InvalidFormatException, IOException {
+		File parserFile = new File(this.modelDir, "en-parser-chunking.bin");
+		FileInputStream parserStream = new FileInputStream(parserFile);
+		ParserModel model = new ParserModel(parserStream);
+		Parser parser = ParserFactory.create(model, 20, // beam size
+				0.95); // advance percentage
+		Parse[] results = ParserTool.parseLine(
+				"The Minnesota Twins , the 1991 World Series "
+						+ "Champions , are currently in third place .", parser,
+				3);
+		for (int i = 0; i < results.length; i++) {
+			results[i].show();
+		}
+	}
+
+	@Test
+	public void ExtractTextTest() throws IOException, SAXException,
+			TikaException {
+		String html = "<html><head><title>Best Pizza Joints in America</title></head><body><p>The best pizza place in the US is<a href=\"http://antoniospizzas.com/\">Antonio's Pizza</a></p> <p>It is located in Amherst, MA.</p> </body> </html>";
+		InputStream input = new ByteArrayInputStream(html.getBytes(Charset
+				.forName("UTF-8")));
+		ContentHandler text = new BodyContentHandler();
+		LinkContentHandler links = new LinkContentHandler();
+		ContentHandler handler = new TeeContentHandler(links, text);
+		Metadata metadata = new Metadata();
+		org.apache.tika.parser.Parser parser = new HtmlParser();
+		ParseContext context = new ParseContext();
+		parser.parse(input, handler, metadata, context);
+		assertEquals("Best Pizza Joints in America", metadata.get(TikaCoreProperties.TITLE));
+	}
 }

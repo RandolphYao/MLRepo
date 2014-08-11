@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="TameTextTest" project="OpenNLP" tests="3" started="3" failures="0" errors="0" ignored="0">
-  <testsuite name="org.ranyao.nlpUnitTest.TameTextTest" time="0.784">
-    <testcase name="SentenceDetectionTest" classname="org.ranyao.nlpUnitTest.TameTextTest" time="0.062"/>
-    <testcase name="StemmerTest" classname="org.ranyao.nlpUnitTest.TameTextTest" time="0.004"/>
-    <testcase name="POSTaggingTest" classname="org.ranyao.nlpUnitTest.TameTextTest" time="0.717"/>
-  </testsuite>
-</testrun>
