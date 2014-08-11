@@ -139,4 +139,6 @@ public class TameTextTest {
 		assertEquals("The best pizza place in the US is Antonio's Pizza.\n It is located in Amherst, MA.\n", text.toString());
 		assertEquals("[<a href=\"http://antoniospizzas.com/\">Antonio's Pizza</a>]", links.getLinks().toString());
 	}
+	
+	
 }

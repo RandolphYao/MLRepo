@@ -6,4 +6,16 @@
 <fullyQualifiedTypeName name="opennlp.tools.parser.ParserFactory"/>
 <fullyQualifiedTypeName name="opennlp.tools.cmdline.parser.ParserTool"/>
 <fullyQualifiedTypeName name="opennlp.tools.parser.Parse"/>
+<fullyQualifiedTypeName name="java.io.ByteArrayInputStream"/>
+<fullyQualifiedTypeName name="java.nio.charset.Charset"/>
+<fullyQualifiedTypeName name="java.net.ContentHandler"/>
+<fullyQualifiedTypeName name="org.apache.tika.sax.BodyContentHandler"/>
+<fullyQualifiedTypeName name="org.xml.sax.ContentHandler"/>
+<fullyQualifiedTypeName name="org.apache.tika.sax.LinkContentHandler"/>
+<fullyQualifiedTypeName name="org.apache.tika.sax.TeeContentHandler"/>
+<fullyQualifiedTypeName name="org.apache.tika.metadata.Metadata"/>
+<fullyQualifiedTypeName name="org.apache.tika.parser.html.HtmlParser"/>
+<fullyQualifiedTypeName name="org.apache.tika.parser.ParseContext"/>
+<fullyQualifiedTypeName name="org.apache.tika.parser.Parser"/>
+<fullyQualifiedTypeName name="org.apache.tika.metadata.TikaCoreProperties"/>
 </qualifiedTypeNameHistroy>
